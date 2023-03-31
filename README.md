@@ -1,2 +1,88 @@
-# quantum_dl
-Quantum Deep Learning Algorithms
+
+# Quantum Deep Learning Algorithms
+
+## a. Classical Neural Network
+
+A classical neural network consists of multiple layers of neurons. For a given layer, the outputs are calculated using the inputs ($x$), the weights ($W$), and the biases ($b$), and then activated by an activation function ($f$).
+
+$$
+y = f(W \cdot x + b)
+$$
+
+## b. Quantum Encoding of Weights and Biases
+
+The encoding of weights and biases into quantum parameters can be done in different ways. Two common techniques are amplitude encoding and angle encoding.
+
+### Amplitude Encoding
+
+Here, the weights and biases are transformed into probability amplitudes of quantum states. For example, suppose we have a weight $w$ and a bias $b$. We can normalize them and map them to a quantum amplitude vector:
+
+$$
+|\psi\rangle = \frac{w}{\sqrt{w^2 + b^2}} |0\rangle + \frac{b}{\sqrt{w^2 + b^2}} |1\rangle
+$$
+
+### Angle Encoding
+
+In this method, the weights and biases are transformed into angles ($\theta$) that are used to apply rotations on the qubits. For example, we can use the $RX$ rotation gate to encode a weight $w$ into an angle $\theta$:
+
+$$
+\theta = 2 \cdot \arctan(w)
+$$
+
+$$
+RX(\theta)|0\rangle = \cos(\frac{\theta}{2}) |0\rangle + \sin(\frac{\theta}{2}) |1\rangle
+$$
+
+## c. Implementation of Quantum Logic Gates
+
+Quantum logic gates are used to create quantum circuits that represent the operations of the neural network. For example, to perform a weight multiplication operation with the inputs, we can use the controlled-RY (CRX) gate:
+
+$$
+CRX(\theta) = |0\rangle \langle 0| \otimes I + |1\rangle \langle 1| \otimes RX(\theta)
+$$
+
+Here, $\otimes$ represents the tensor product, and $I$ is the identity matrix.
+
+## d. Quantum Optimization
+
+Training a quantum neural network involves optimizing the quantum parameters to minimize a cost function. Quantum optimization techniques include quantum gradient descent and variational quantum optimizers.
+
+### Quantum Gradient Descent
+
+This algorithm is similar to classical gradient descent, but it uses quantum gradients obtained from quantum circuits. The update of the parameters is done as follows:
+
+$$
+\theta' = \theta - \alpha \cdot \frac{\partial C}{\partial \theta}
+$$
+
+where $\theta'$ is the updated parameter, $\alpha$ is the learning rate, and $\frac{\partial C}{\partial \theta}$ is the quantum gradient.
+
+### Variational Quantum Optimizers
+
+Variational quantum optimizers are algorithms that minimize the cost function by updating the quantum parameters based on the outputs of a quantum circuit. Rotosolve algorithm and VQE (Variational Quantum Eigensolver) are examples.
+
+#### Rotosolve
+
+The Rotosolve algorithm minimizes the cost function by searching for the optimal angle for each quantum parameter, without requiring gradient calculations. For each parameter $\theta_i$, we solve the following equation:
+
+$$
+\frac{\partial C}{\partial \theta_i} = 0
+$$
+
+and update the parameter with the obtained solution:
+
+$$
+\theta_i' = \theta_{i,\text{optimal}}
+$$
+
+#### Variational Quantum Eigensolver (VQE)
+
+VQE is a hybrid algorithm that utilizes both classical and quantum resources. It relies on an ansatz (a parameterized quantum circuit) to prepare the quantum state and a classical optimizer to minimize the cost function. The update of the parameters is done based on the measured outcomes of the quantum circuit:
+
+$$
+\theta' = \text{Classical\ {Optimizer}}(\theta, \text{Quantum\ {Measurements}})
+$$
+
+In summary, to create quantum deep learning algorithms, we start by constructing a classical neural network, then encode the weights and biases into quantum parameters. Next, we implement quantum logic gates to create quantum circuits representing the operations of the neural network. Finally, we apply quantum optimization techniques to train the network and minimize the cost function.
+
+
