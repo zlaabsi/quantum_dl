@@ -1,6 +1,16 @@
 
 # Create Quantum Deep Learning Algorithms 
 
+- a. Create a classical neural network with weights and biases.
+- b. Transform the weights and biases into quantum parameters by 
+using encoding techniques, such as amplitude encoding or angle encoding. 
+angle encoding.
+- c. Implement quantum logic gates to create quantum circuits 
+circuits that represent the operations of the neural network.
+- d. Apply quantum optimization techniques to train the 
+network.
+
+
 ## a. Classical Neural Network
 
 A classical neural network consists of multiple layers of neurons. For a given layer, the outputs are calculated using the inputs ($x$), the weights ($W$), and the biases ($b$), and then activated by an activation function ($f$).
