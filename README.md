@@ -1,5 +1,5 @@
 
-# Quantum Deep Learning Algorithms
+# Create Quantum Deep Learning Algorithms 
 
 ## a. Classical Neural Network
 
@@ -82,6 +82,8 @@ VQE is a hybrid algorithm that utilizes both classical and quantum resources. It
 $$
 \theta' = \text{Classical\ {Optimizer}}(\theta, \text{Quantum\ {Measurements}})
 $$
+
+## Conclusion
 
 In summary, to create quantum deep learning algorithms, we start by constructing a classical neural network, then encode the weights and biases into quantum parameters. Next, we implement quantum logic gates to create quantum circuits representing the operations of the neural network. Finally, we apply quantum optimization techniques to train the network and minimize the cost function.
 
