@@ -97,4 +97,62 @@ $$
 
 In summary, to create quantum deep learning algorithms, we start by constructing a classical neural network, then encode the weights and biases into quantum parameters. Next, we implement quantum logic gates to create quantum circuits representing the operations of the neural network. Finally, we apply quantum optimization techniques to train the network and minimize the cost function.
 
+---
+
+## Python Script
+
+Here's a Python script using PennyLane that closely follows the given steps:
+
+```python
+
+import pennylane as qml
+from pennylane import numpy as np
+
+# a. Create a classical neural network with weights and biases
+def classical_neural_network(x, weights, biases):
+    return np.tanh(np.dot(weights, x) + biases)
+
+# b. Transform the weights and biases into quantum parameters using angle encoding
+def angle_encoding(weight, bias):
+    return 2 * np.arctan(weight), 2 * np.arctan(bias)
+
+# c. Implement quantum logic gates to create quantum circuits
+def quantum_neural_network(params, x=None, y=None):
+    qml.RX(params[0], wires=0)
+    qml.RY(params[1], wires=0)
+
+# d. Apply quantum optimization techniques to train the network
+dev = qml.device("default.qubit", wires=1)
+
+@qml.qnode(dev)
+def circuit(params, x=None, y=None):
+    quantum_neural_network(params)
+    return qml.expval(qml.PauliZ(0))
+
+def cost(params, X, Y):
+    predictions = np.array([circuit(params, x=x) for x in X])
+    return np.mean((predictions - Y) ** 2)
+
+# Generate training data
+X_train = np.linspace(-1, 1, 10)
+Y_train = np.array([classical_neural_network(x, 2, 0.5) for x in X_train])
+
+# Transform the weights and biases into quantum parameters
+weight, bias = angle_encoding(2, 0.5)
+params = np.array([weight, bias])
+
+# Train the quantum neural network
+opt = qml.GradientDescentOptimizer(stepsize=0.1)
+steps = 100
+
+for i in range(steps):
+    params, prev_cost = opt.step_and_cost(cost, params, X_train, Y_train)
+    if i % 10 == 0:
+        print(f"Step {i}: cost = {prev_cost}")
+
+# Evaluate the trained quantum neural network
+predictions = np.array([circuit(params, x=x) for x in X_train])
+
+```
+
 
