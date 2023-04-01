@@ -31,6 +31,8 @@ $$
 y = f(W \cdot x + b)
 $$
 
+For example, let's create a simple classical neural network with one hidden layer using TensorFlow:
+
 ```python
 import tensorflow as tf
 
