@@ -45,7 +45,7 @@ $$
 
 ## c. Implementation of Quantum Logic Gates
 
-Quantum logic gates are used to create quantum circuits that represent the operations of the neural network. For example, to perform a weight multiplication operation with the inputs, we can use the controlled-RY (CRX) gate:
+Quantum logic gates are used to create quantum circuits that represent the operations of the neural network. For example, to perform a weight multiplication operation with the inputs, we can use the controlled-RX (CRX) gate:
 
 $$
 CRX(\theta) = |0\rangle \langle 0| \otimes I + |1\rangle \langle 1| \otimes RX(\theta)
