@@ -103,6 +103,11 @@ In summary, to create quantum deep learning algorithms, we start by constructing
 
 Here's a Python script using PennyLane that closely follows the given steps:
 
+```css
+0: ──RX(θ1)──RY(θ2)──┤ ⟨Z⟩
+```
+
+
 ```python
 
 import pennylane as qml
