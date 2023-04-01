@@ -103,10 +103,6 @@ In summary, to create quantum deep learning algorithms, we start by constructing
 
 Here's a Python script using PennyLane that closely follows the given steps:
 
-```css
-0: ──RX(θ1)──RY(θ2)──┤ ⟨Z⟩
-```
-
 
 ```python
 
@@ -159,5 +155,14 @@ for i in range(steps):
 predictions = np.array([circuit(params, x=x) for x in X_train])
 
 ```
+Here is the quantum circuit representation of the quantum neural network created in the script:
+
+```css
+0: ──RX(θ1)──RY(θ2)──┤ ⟨Z⟩
+```
+
+This circuit consists of a single qubit with two rotation gates applied to it. The RX gate represents a rotation around the X-axis by an angle θ1, while the RY gate represents a rotation around the Y-axis by an angle θ2. Finally, the expectation value of the Pauli-Z operator, ⟨Z⟩, is measured on the qubit.
+
+The angles θ1 and θ2 are the transformed weights and biases of the classical neural network encoded into quantum parameters. The quantum circuit represents a simple quantum neural network with a single qubit and only two rotation gates. In practice, more complex quantum neural networks might involve multiple qubits, additional gates, and more sophisticated encoding techniques.
 
 
