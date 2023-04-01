@@ -11,6 +11,8 @@ Before we begin, make sure you have PennyLane installed:
 pip install pennylane
 ```
 
+## Steps
+
 - a. Create a classical neural network with weights and biases.
 - b. Transform the weights and biases into quantum parameters by 
 using encoding techniques, such as amplitude encoding or angle encoding. 
