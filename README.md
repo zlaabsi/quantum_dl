@@ -11,6 +11,73 @@ circuits that represent the operations of the neural network.
 network.
 
 
+## Python Script
+
+Here's a Python script using PennyLane that closely follows the given steps:
+
+
+```python
+
+import pennylane as qml
+from pennylane import numpy as np
+
+# a. Create a classical neural network with weights and biases
+def classical_neural_network(x, weights, biases):
+    return np.tanh(np.dot(weights, x) + biases)
+
+# b. Transform the weights and biases into quantum parameters using angle encoding
+def angle_encoding(weight, bias):
+    return 2 * np.arctan(weight), 2 * np.arctan(bias)
+
+# c. Implement quantum logic gates to create quantum circuits
+def quantum_neural_network(params, x=None, y=None):
+    qml.RX(params[0], wires=0)
+    qml.RY(params[1], wires=0)
+
+# d. Apply quantum optimization techniques to train the network
+dev = qml.device("default.qubit", wires=1)
+
+@qml.qnode(dev)
+def circuit(params, x=None, y=None):
+    quantum_neural_network(params)
+    return qml.expval(qml.PauliZ(0))
+
+def cost(params, X, Y):
+    predictions = np.array([circuit(params, x=x) for x in X])
+    return np.mean((predictions - Y) ** 2)
+
+# Generate training data
+X_train = np.linspace(-1, 1, 10)
+Y_train = np.array([classical_neural_network(x, 2, 0.5) for x in X_train])
+
+# Transform the weights and biases into quantum parameters
+weight, bias = angle_encoding(2, 0.5)
+params = np.array([weight, bias])
+
+# Train the quantum neural network
+opt = qml.GradientDescentOptimizer(stepsize=0.1)
+steps = 100
+
+for i in range(steps):
+    params, prev_cost = opt.step_and_cost(cost, params, X_train, Y_train)
+    if i % 10 == 0:
+        print(f"Step {i}: cost = {prev_cost}")
+
+# Evaluate the trained quantum neural network
+predictions = np.array([circuit(params, x=x) for x in X_train])
+
+```
+Here is the quantum circuit representation of the quantum neural network created in the script:
+
+```css
+0: ──RX(θ1)──RY(θ2)──┤ ⟨Z⟩
+```
+
+This circuit consists of a single qubit with two rotation gates applied to it. The RX gate represents a rotation around the X-axis by an angle θ1, while the RY gate represents a rotation around the Y-axis by an angle θ2. Finally, the expectation value of the Pauli-Z operator, ⟨Z⟩, is measured on the qubit.
+
+The angles θ1 and θ2 are the transformed weights and biases of the classical neural network encoded into quantum parameters. The quantum circuit represents a simple quantum neural network with a single qubit and only two rotation gates. In practice, more complex quantum neural networks might involve multiple qubits, additional gates, and more sophisticated encoding techniques.
+
+
 ## a. Classical Neural Network
 
 A classical neural network consists of multiple layers of neurons. For a given layer, the outputs are calculated using the inputs ($x$), the weights ($W$), and the biases ($b$), and then activated by an activation function ($f$).
@@ -99,70 +166,6 @@ In summary, to create quantum deep learning algorithms, we start by constructing
 
 ---
 
-## Python Script
 
-Here's a Python script using PennyLane that closely follows the given steps:
-
-
-```python
-
-import pennylane as qml
-from pennylane import numpy as np
-
-# a. Create a classical neural network with weights and biases
-def classical_neural_network(x, weights, biases):
-    return np.tanh(np.dot(weights, x) + biases)
-
-# b. Transform the weights and biases into quantum parameters using angle encoding
-def angle_encoding(weight, bias):
-    return 2 * np.arctan(weight), 2 * np.arctan(bias)
-
-# c. Implement quantum logic gates to create quantum circuits
-def quantum_neural_network(params, x=None, y=None):
-    qml.RX(params[0], wires=0)
-    qml.RY(params[1], wires=0)
-
-# d. Apply quantum optimization techniques to train the network
-dev = qml.device("default.qubit", wires=1)
-
-@qml.qnode(dev)
-def circuit(params, x=None, y=None):
-    quantum_neural_network(params)
-    return qml.expval(qml.PauliZ(0))
-
-def cost(params, X, Y):
-    predictions = np.array([circuit(params, x=x) for x in X])
-    return np.mean((predictions - Y) ** 2)
-
-# Generate training data
-X_train = np.linspace(-1, 1, 10)
-Y_train = np.array([classical_neural_network(x, 2, 0.5) for x in X_train])
-
-# Transform the weights and biases into quantum parameters
-weight, bias = angle_encoding(2, 0.5)
-params = np.array([weight, bias])
-
-# Train the quantum neural network
-opt = qml.GradientDescentOptimizer(stepsize=0.1)
-steps = 100
-
-for i in range(steps):
-    params, prev_cost = opt.step_and_cost(cost, params, X_train, Y_train)
-    if i % 10 == 0:
-        print(f"Step {i}: cost = {prev_cost}")
-
-# Evaluate the trained quantum neural network
-predictions = np.array([circuit(params, x=x) for x in X_train])
-
-```
-Here is the quantum circuit representation of the quantum neural network created in the script:
-
-```css
-0: ──RX(θ1)──RY(θ2)──┤ ⟨Z⟩
-```
-
-This circuit consists of a single qubit with two rotation gates applied to it. The RX gate represents a rotation around the X-axis by an angle θ1, while the RY gate represents a rotation around the Y-axis by an angle θ2. Finally, the expectation value of the Pauli-Z operator, ⟨Z⟩, is measured on the qubit.
-
-The angles θ1 and θ2 are the transformed weights and biases of the classical neural network encoded into quantum parameters. The quantum circuit represents a simple quantum neural network with a single qubit and only two rotation gates. In practice, more complex quantum neural networks might involve multiple qubits, additional gates, and more sophisticated encoding techniques.
 
 
