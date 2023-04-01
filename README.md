@@ -1,5 +1,15 @@
 
-# Create Quantum Deep Learning Algorithms 
+# Create Quantum Deep Learning Algorithms with PennyLane
+
+In this document, we will walk through the process of creating a quantum deep learning algorithm using PennyLane, a popular quantum machine learning library.
+
+## Setup
+
+Before we begin, make sure you have PennyLane installed:
+
+```bash
+pip install pennylane
+```
 
 - a. Create a classical neural network with weights and biases.
 - b. Transform the weights and biases into quantum parameters by 
@@ -19,9 +29,18 @@ $$
 y = f(W \cdot x + b)
 $$
 
+```python
+import tensorflow as tf
+
+model = tf.keras.Sequential([
+    tf.keras.layers.Dense(10, activation='relu', input_shape=(4,)),
+    tf.keras.layers.Dense(3, activation='softmax')
+])
+```
+
 ## b. Quantum Encoding of Weights and Biases
 
-The encoding of weights and biases into quantum parameters can be done in different ways. Two common techniques are amplitude encoding and angle encoding.
+The encoding of weights and biases into quantum parameters can be done in different ways. Two common techniques are amplitude encoding and angle encoding. We will use angle encoding to demonstrate this with PennyLane.
 
 ### Amplitude Encoding
 
@@ -43,6 +62,23 @@ $$
 RX(\theta)|0\rangle = \cos(\frac{\theta}{2}) |0\rangle + \sin(\frac{\theta}{2}) |1\rangle
 $$
 
+To demonstrate this with PennyLane, let's create a simple variational circuit using the RX rotation gate:
+
+```python
+import pennylane as qml
+
+n_qubits = 1
+dev = qml.device('default.qubit', wires=n_qubits)
+
+@qml.qnode(dev)
+def simple_variational_circuit(theta):
+    qml.RX(theta, wires=0)
+    return qml.expval(qml.PauliZ(0))
+
+angle = 2 * qml.numpy.arctan(0.5)
+result = simple_variational_circuit(angle)
+```
+
 ## c. Implementation of Quantum Logic Gates
 
 Quantum logic gates are used to create quantum circuits that represent the operations of the neural network. For example, to perform a weight multiplication operation with the inputs, we can use the controlled-RX (CRX) gate:
@@ -53,9 +89,26 @@ $$
 
 Here, $\otimes$ represents the tensor product, and $I$ is the identity matrix.
 
+Let's implement a simple quantum circuit with the CRX gate using PennyLane:
+
+````python
+n_qubits = 2
+dev = qml.device('default.qubit', wires=n_qubits)
+
+@qml.qnode(dev)
+def crx_circuit(theta):
+    qml.Hadamard(wires=0)
+    qml.CRX(theta, wires=[0, 1])
+    return qml.expval(qml.PauliZ(1))
+
+angle = 2 * qml.numpy.arctan(0.5)
+result = crx_circuit(angle)
+````
+
+
 ## d. Quantum Optimization
 
-Training a quantum neural network involves optimizing the quantum parameters to minimize a cost function. Quantum optimization techniques include quantum gradient descent and variational quantum optimizers.
+Training a quantum neural network involves optimizing the quantum parameters to minimize a cost function. Quantum optimization techniques include quantum gradient descent and variational quantum optimizers. We will demonstrate the use of the variational quantum eigensolver (VQE) algorithm with PennyLane
 
 ### Quantum Gradient Descent
 
@@ -93,9 +146,46 @@ $$
 \theta' = \text{Classical\ {Optimizer}}(\theta, \text{Quantum\ {Measurements}})
 $$
 
+Let's implement a simple VQE example with PennyLane:
+
+```python
+import pennylane as qml
+from pennylane import numpy as np
+
+n_qubits = 2
+dev = qml.device('default.qubit', wires=n_qubits)
+
+def vqe_ansatz(params):
+    qml.RX(params[0], wires=0)
+    qml.RY(params[1], wires=1)
+    qml.CNOT(wires=[0, 1])
+
+@qml.qnode(dev)
+def vqe_circuit(params):
+    vqe_ansatz(params)
+    return qml.expval(qml.PauliZ(0) @ qml.PauliZ(1))
+
+def vqe_cost(params):
+    return vqe_circuit(params)
+
+init_params = np.random.random(2)
+optimizer = qml.GradientDescentOptimizer(stepsize=0.4)
+
+n_steps = 100
+params = init_params
+
+for _ in range(n_steps):
+    params = optimizer.step(vqe_cost, params)
+
+final_cost = vqe_cost(params)
+
+```
+
 ## Conclusion
 
 In summary, to create quantum deep learning algorithms, we start by constructing a classical neural network, then encode the weights and biases into quantum parameters. Next, we implement quantum logic gates to create quantum circuits representing the operations of the neural network. Finally, we apply quantum optimization techniques to train the network and minimize the cost function.
+
+PennyLane provides a powerful and flexible framework for creating and optimizing quantum circuits for deep learning and other applications. By combining classical and quantum resources, we can develop novel algorithms that leverage the power of quantum computing to solve complex problems.
 
 ---
 
